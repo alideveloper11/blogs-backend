@@ -16,6 +16,7 @@ class Blog(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, blank=True)
     content = models.TextField()
+    excerpt = models.TextField(blank=True, default='')
     author = models.CharField(max_length=100, blank=True, default='')
     category = models.CharField(max_length=100, blank=True, default='')
     is_published = models.BooleanField(default=False)

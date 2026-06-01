@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from .serializers import BlogSerializer, BlogCreateSerializer
+from .serializers import BlogSerializer, BlogSummarySerializer, BlogCreateSerializer
 from . import services
 
 
@@ -11,7 +11,7 @@ class BlogListCreateView(APIView):
     def get(self, request, website_slug):
         website = services.get_website_by_slug(website_slug)
         blogs = services.get_all_blogs(website)
-        serializer = BlogSerializer(blogs, many=True, context={'request': request})
+        serializer = BlogSummarySerializer(blogs, many=True, context={'request': request})
         return Response(serializer.data)
 
     def post(self, request, website_slug):

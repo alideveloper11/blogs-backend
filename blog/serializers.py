@@ -14,10 +14,25 @@ class BlogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
         fields = [
-            'id', 'title', 'slug', 'content',
+            'id', 'title', 'slug', 'content', 'excerpt',
             'author', 'category', 'is_published',
             'created_at', 'updated_at', 'images',
         ]
+
+
+class BlogSummarySerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Blog
+        fields = ['slug', 'title', 'excerpt', 'image']
+
+    def get_image(self, obj):
+        first_image = obj.images.first()
+        if first_image:
+            request = self.context.get('request')
+            return request.build_absolute_uri(first_image.image.url) if request else first_image.image.url
+        return None
 
 
 class BlogCreateSerializer(serializers.ModelSerializer):
@@ -29,7 +44,7 @@ class BlogCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Blog
-        fields = ['title', 'slug', 'content', 'author', 'category', 'is_published', 'images']
+        fields = ['title', 'slug', 'content', 'excerpt', 'author', 'category', 'is_published', 'images']
 
     def validate_images(self, images):
         if len(images) > 4:
