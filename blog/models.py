@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 class Website(models.Model):
@@ -15,7 +16,8 @@ class Blog(models.Model):
     website = models.ForeignKey(Website, on_delete=models.CASCADE, related_name='blogs')
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, blank=True)
-    content = models.TextField()
+    content = CKEditor5Field(config_name='default')
+    excerpt = models.TextField(blank=True, default='')
     author = models.CharField(max_length=100, blank=True, default='')
     category = models.CharField(max_length=100, blank=True, default='')
     is_published = models.BooleanField(default=False)
