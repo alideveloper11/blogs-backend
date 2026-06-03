@@ -94,8 +94,13 @@ STORAGES = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+CKEDITOR_5_FILE_UPLOAD_PERMISSION = 'staff'
+
 CKEDITOR_5_CONFIGS = {
     'default': {
+        'simpleUpload': {
+            'uploadUrl': '/api/ckeditor5/image_upload/',
+        },
         'toolbar': [
             'heading', '|',
             'bold', 'italic', 'underline', 'strikethrough', '|',
@@ -104,6 +109,37 @@ CKEDITOR_5_CONFIGS = {
             'insertImage', 'mediaEmbed', '|',
             'undo', 'redo',
         ],
+        'image': {
+            'styles': {
+                'options': [
+                    'inline',
+                    'alignLeft',
+                    'alignRight',
+                    'alignCenter',
+                    'alignBlockLeft',
+                    'alignBlockRight',
+                    'block',
+                    'side',
+                ]
+            },
+            'resizeOptions': [
+                {'name': 'resizeImage:25', 'value': '25', 'label': '25%', 'icon': 'small'},
+                {'name': 'resizeImage:50', 'value': '50', 'label': '50%', 'icon': 'medium'},
+                {'name': 'resizeImage:75', 'value': '75', 'label': '75%', 'icon': 'large'},
+            ],
+            'toolbar': [
+                'imageStyle:inline',
+                'imageStyle:alignLeft',
+                'imageStyle:alignRight',
+                'imageStyle:alignCenter',
+                '|',
+                'resizeImage:25',
+                'resizeImage:50',
+                'resizeImage:75',
+                '|',
+                'imageTextAlternative',
+            ],
+        },
         'heading': {
             'options': [
                 {'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph'},
