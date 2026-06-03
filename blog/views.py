@@ -1,9 +1,34 @@
+import cloudinary
+import cloudinary.uploader
+from django.conf import settings
+from django.contrib.admin.views.decorators import staff_member_required
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
 from .serializers import BlogSerializer, BlogSummarySerializer, BlogCreateSerializer
 from . import services
+
+
+@staff_member_required
+@require_POST
+def ckeditor_image_upload(request):
+    image = request.FILES.get('upload')
+    if not image:
+        return JsonResponse({'error': {'message': 'No image provided'}}, status=400)
+
+    cloudinary_config = settings.CLOUDINARY_STORAGE
+    cloudinary.config(
+        cloud_name=cloudinary_config['CLOUD_NAME'],
+        api_key=cloudinary_config['API_KEY'],
+        api_secret=cloudinary_config['API_SECRET'],
+    )
+
+    image.seek(0)
+    result = cloudinary.uploader.upload(image, folder='blog_inline_images')
+    return JsonResponse({'url': result['secure_url']})
 
 
 class BlogListCreateView(APIView):
