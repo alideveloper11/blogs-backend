@@ -15,8 +15,8 @@ class BlogSerializer(serializers.ModelSerializer):
         model = Blog
         fields = [
             'id', 'title', 'slug', 'content', 'excerpt',
-            'author', 'category', 'is_published',
-            'created_at', 'updated_at', 'images',
+            'author', 'category', 'meta_title', 'meta_description', 'schema',
+            'is_published', 'created_at', 'updated_at', 'images',
         ]
 
 
@@ -44,7 +44,7 @@ class BlogCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Blog
-        fields = ['title', 'slug', 'content', 'excerpt', 'author', 'category', 'is_published', 'images']
+        fields = ['title', 'slug', 'content', 'excerpt', 'author', 'category', 'meta_title', 'meta_description', 'schema', 'is_published', 'images']
 
     def validate_images(self, images):
         if len(images) > 4:
