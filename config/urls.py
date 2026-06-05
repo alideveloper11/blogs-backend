@@ -2,10 +2,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import RedirectView
 
 from blog.views import ckeditor_image_upload
 
 urlpatterns = [
+    path('', RedirectView.as_view(url='/admin/', permanent=False)),
     path('admin/', admin.site.urls),
     path('api/', include('blog.urls')),
     path('ckeditor5/image_upload/', ckeditor_image_upload, name='ck_editor_5_upload_file'),
