@@ -9,18 +9,29 @@ def get_website_by_slug(website_slug: str) -> Website:
     return get_object_or_404(Website, slug=website_slug)
 
 
-def get_all_blogs(website: Website):
-    return Blog.objects.filter(website=website, is_published=True).prefetch_related('images')
+def get_all_blogs(website: Website, content_type: str = Blog.BLOG):
+    return Blog.objects.filter(
+        website=website,
+        content_type=content_type,
+        is_published=True,
+    ).prefetch_related('images')
 
 
-def get_blog_by_slug(website: Website, slug: str) -> Blog:
-    return get_object_or_404(Blog, website=website, slug=slug, is_published=True)
+def get_blog_by_slug(website: Website, slug: str, content_type: str = Blog.BLOG) -> Blog:
+    return get_object_or_404(
+        Blog,
+        website=website,
+        slug=slug,
+        content_type=content_type,
+        is_published=True,
+    )
 
 
-def create_blog(validated_data: dict, images: list, website: Website) -> Blog:
+def create_blog(validated_data: dict, images: list, website: Website, content_type: str = Blog.BLOG) -> Blog:
     if len(images) > MAX_IMAGES_PER_BLOG:
         raise ValueError(f"A blog post can have at most {MAX_IMAGES_PER_BLOG} images.")
 
+    validated_data['content_type'] = content_type
     blog = Blog.objects.create(website=website, **validated_data)
 
     for image in images:
