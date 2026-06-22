@@ -13,7 +13,15 @@ class Website(models.Model):
 
 
 class Blog(models.Model):
+    BLOG = 'blog'
+    CASE_STUDY = 'case_study'
+    CONTENT_TYPE_CHOICES = [
+        (BLOG, 'Blog'),
+        (CASE_STUDY, 'Case Study'),
+    ]
+
     website = models.ForeignKey(Website, on_delete=models.CASCADE, related_name='blogs')
+    content_type = models.CharField(max_length=20, choices=CONTENT_TYPE_CHOICES, default=BLOG)
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, blank=True)
     content = CKEditor5Field(config_name='default')
@@ -38,6 +46,20 @@ class Blog(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
+
+class BlogPost(Blog):
+    class Meta:
+        proxy = True
+        verbose_name = 'Blog'
+        verbose_name_plural = 'Blogs'
+
+
+class CaseStudy(Blog):
+    class Meta:
+        proxy = True
+        verbose_name = 'Case Study'
+        verbose_name_plural = 'Case Studies'
 
 
 class BlogImage(models.Model):
