@@ -1,0 +1,71 @@
+{% extends "admin/change_form.html" %}
+
+{% load i18n admin_urls %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <style>
+    .submit-row.contact-query-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .submit-row.contact-query-actions a {
+      float: none;
+      margin: 0;
+      text-decoration: none;
+    }
+
+    .submit-row.contact-query-actions .action-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 15px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background: #f6f8fa;
+      color: #24292f;
+    }
+
+    .submit-row.contact-query-actions .action-button:hover {
+      background: #eef2f6;
+      color: #24292f;
+    }
+
+    .submit-row.contact-query-actions .delete-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 15px;
+      border: 1px solid #ba2121;
+      border-radius: 6px;
+      background: #ba2121;
+      color: #fff;
+    }
+
+    .submit-row.contact-query-actions .delete-button:hover {
+      background: #a11c1c;
+      color: #fff;
+    }
+  </style>
+{% endblock %}
+
+{% block submit_buttons_top %}
+  <div class="submit-row contact-query-actions">
+    {% if original %}
+      <a href="{% url opts|admin_urlname:'delete' original.pk|admin_urlquote %}" class="delete-button">{% translate "Delete" %}</a>
+    {% endif %}
+    <a href="{% url opts|admin_urlname:'changelist' %}" class="action-button">{% translate "Go back" %}</a>
+  </div>
+{% endblock %}
+
+{% block submit_buttons_bottom %}
+  <div class="submit-row contact-query-actions">
+    {% if original %}
+      <a href="{% url opts|admin_urlname:'delete' original.pk|admin_urlquote %}" class="delete-button">{% translate "Delete" %}</a>
+    {% endif %}
+    <a href="{% url opts|admin_urlname:'changelist' %}" class="action-button">{% translate "Go back" %}</a>
+  </div>
+{% endblock %}

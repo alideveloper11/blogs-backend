@@ -62,6 +62,23 @@ class CaseStudy(Blog):
         verbose_name_plural = 'Case Studies'
 
 
+class ContactQuery(models.Model):
+    website = models.ForeignKey(Website, on_delete=models.CASCADE, related_name='contact_queries')
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    number = models.CharField(max_length=30)
+    project_detail = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Contact Query'
+        verbose_name_plural = 'Contact Queries'
+
+    def __str__(self):
+        return f"{self.name} - {self.website.name}"
+
+
 class BlogImage(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='blog_images/')

@@ -16,6 +16,8 @@ from .serializers import (
     CaseStudySerializer,
     CaseStudySummarySerializer,
     CaseStudyCreateSerializer,
+    ContactQueryCreateSerializer,
+    ContactQuerySerializer,
 )
 from . import services
 
@@ -135,3 +137,33 @@ class CaseStudyDetailView(BlogDetailView):
     content_type = Blog.CASE_STUDY
     detail_serializer_class = CaseStudySerializer
     write_serializer_class = CaseStudyCreateSerializer
+
+
+class ContactQuerySubmitView(APIView):
+    def post(self, request, website_slug):
+        website = services.get_website_by_slug(website_slug)
+        serializer = ContactQueryCreateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        contact_query = services.create_contact_query(serializer.validated_data, website)
+        return Response(
+            ContactQuerySerializer(contact_query).data,
+            status=status.HTTP_201_CREATED,
+        )
+
+
+class ContactQueryListView(APIView):
+    def get(self, request, website_slug):
+        website = services.get_website_by_slug(website_slug)
+        queries = services.get_all_contact_queries(website)
+        serializer = ContactQuerySerializer(queries, many=True)
+        return Response(serializer.data)
+
+
+class ContactQueryDetailView(APIView):
+    def get(self, request, website_slug, query_id):
+        website = services.get_website_by_slug(website_slug)
+        contact_query = services.get_contact_query_by_id(website, query_id)
+        serializer = ContactQuerySerializer(contact_query)
+        return Response(serializer.data)

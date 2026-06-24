@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Blog, BlogImage
+from .models import Blog, BlogImage, ContactQuery
 
 
 class BlogImageSerializer(serializers.ModelSerializer):
@@ -69,3 +69,17 @@ class CaseStudySummarySerializer(BlogSummarySerializer):
 class CaseStudyCreateSerializer(BlogCreateSerializer):
     class Meta(BlogCreateSerializer.Meta):
         fields = ['content_type', *BlogCreateSerializer.Meta.fields]
+
+
+class ContactQueryCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactQuery
+        fields = ['name', 'email', 'number', 'project_detail']
+
+
+class ContactQuerySerializer(serializers.ModelSerializer):
+    website = serializers.SlugRelatedField(read_only=True, slug_field='slug')
+
+    class Meta:
+        model = ContactQuery
+        fields = ['id', 'website', 'name', 'email', 'number', 'project_detail', 'created_at']
