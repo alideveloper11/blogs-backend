@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from .models import Blog, BlogImage, Website
+from .models import Blog, BlogImage, ContactQuery, Website
 
 
 MAX_IMAGES_PER_BLOG = 4
@@ -58,3 +58,15 @@ def update_blog(blog: Blog, validated_data: dict, images: list, partial: bool = 
 
 def delete_blog(blog: Blog) -> None:
     blog.delete()
+
+
+def create_contact_query(validated_data: dict, website: Website) -> ContactQuery:
+    return ContactQuery.objects.create(website=website, **validated_data)
+
+
+def get_all_contact_queries(website: Website):
+    return ContactQuery.objects.filter(website=website)
+
+
+def get_contact_query_by_id(website: Website, query_id: int) -> ContactQuery:
+    return get_object_or_404(ContactQuery, website=website, id=query_id)

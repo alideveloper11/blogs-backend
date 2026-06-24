@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Blog, BlogImage, BlogPost, CaseStudy, Website
+from .models import Blog, BlogImage, BlogPost, CaseStudy, ContactQuery, Website
 
 
 @admin.register(Website)
@@ -54,3 +54,15 @@ class BlogPostAdmin(BaseContentAdmin):
 @admin.register(CaseStudy)
 class CaseStudyAdmin(BaseContentAdmin):
     content_type = Blog.CASE_STUDY
+
+
+@admin.register(ContactQuery)
+class ContactQueryAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/blog/contactquery/change_form.html'
+    list_display = ['name', 'email', 'number', 'website', 'created_at']
+    list_filter = ['website', 'created_at']
+    search_fields = ['name', 'email', 'number', 'project_detail']
+    readonly_fields = ['website', 'name', 'email', 'number', 'project_detail', 'created_at']
+
+    def has_add_permission(self, request):
+        return False
